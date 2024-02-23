@@ -13,32 +13,40 @@ public class Lab6P1_JonatanVallecillo {
         int menu = 1;
         int opcion = 0;
         while(menu == 1){
-            System.out.print("****** MENU ******\n"
+            int menu2 = 1;
+            while(menu2 == 1){
+                System.out.print("****** MENU ******\n"
                     + "1. Indice de balance\n"
                     + "2. Alternados\n"
                     + "3. Torneo de pelea\n"
                     + "4. Salir\n"
                     + "Ingerese la opcion que desea: ");
-            opcion = leer.nextInt();
-            
-            if(opcion > 0 && opcion < 5){
-                menu = 0;
+                opcion = leer.nextInt();
+
+                if(opcion > 0 && opcion < 5){
+                    menu2 = 0;
+                }else{
+                    System.out.println("ERROR. Intente de nuevo\n.");
+                }
             }
-        }
-        
-        switch(opcion){
-            case 1:
-                System.out.print("Ingrese el tamano del array: ");
-                int tamaño = leer.nextInt();
-                int [] arreglo = arreglo(tamaño);
-                imprimir(arreglo);
-                int [] parametros = parametros(arreglo);
-                System.out.println("\nEl punto de equilibrio esta en el index       "+parametros[2]+"(#"+parametros[3]+")");
-                System.out.println("Porque la suma en la izquierda es "+parametros[0]+" y en la derecha es "+parametros[1]+".");
-                break;
-            case 3:
-                Torneo();
-                break;
+            switch(opcion){
+                case 1:
+                    System.out.print("Ingrese el tamano del array: ");
+                    int tamaño = leer.nextInt();
+                    int [] arreglo = arreglo(tamaño);
+                    imprimir(arreglo);
+                    int [] parametros = parametros(arreglo);
+                    System.out.println("\nEl punto de equilibrio esta en el index       "+parametros[2]+"(#"+parametros[3]+")");
+                    System.out.println("Porque la suma en la izquierda es "+parametros[0]+" y en la derecha es "+parametros[1]+".");
+                    System.out.println();
+                    break;
+                case 3:
+                    Torneo();
+                    break;
+                case 4:
+                    menu = 0;
+                    break;
+            }
         }
     }
     
@@ -116,62 +124,81 @@ public class Lab6P1_JonatanVallecillo {
         nombres[3] = "Hector";
         nombres[4] = "Josue";
         nombres[5] = "Daniel";
-        nombres[6] = "Andre";
+        nombres[6] = "Andrea";
         nombres[7] = "Victor";
         
-        vid[0] = nombres[0].length();
-        vid[1] = nombres[1].length();
-        vid[2] = nombres[2].length();
-        vid[3] = nombres[3].length();
-        vid[4] = nombres[4].length();
-        vid[5] = nombres[5].length();
-        vid[6] = nombres[6].length();
-        vid[7] = nombres[7].length();
+        for(int i = 0; i < nombres.length; i++){
+            vid[i] = nombres[i].length();
+        }
         
         int contador = 8;
         int rondas = 1;
-        String nom1 = "";
-        String nom2 = "";
+        String nom = "";
         
         while(contador > 1){
             System.out.println("Round "+rondas+"\n"
                     + "------------------------");
             for(int i = 0; i < nombres.length; i+= 2){
-                nom1 = nombres[i];
                 char carac1 = ' ';
                 char carac2 = ' ';
                 int cont = 0;
+                int contemp = 0;
+                int contemp2 = 0;
                 int cont2 = 0;
                 int ataque1 = 0;
                 int ataque2 = 0;
-                for(int w = 0; w < nom1.length(); w++){
-                    carac1 = nom1.charAt(i);
-                    for(int v = 0; v < nom1.length(); v++){
-                        carac2 = nom1.charAt(i);
-                        if(carac1 == carac2){
-                            cont ++;
+                System.out.println(nombres[i]+" (Vida: "+vid[i]+") VS "+nombres[i+1]+" (Vida: "+vid[i+1]+")");
+                
+                nom = nombres[i];
+                nom = nom.toLowerCase();
+                ataque1 = ataque(nom);
+                
+                nom = nombres[i+1];
+                nom = nom.toLowerCase();
+                ataque2 = ataque(nom);
+                
+                vid[i] -= ataque2;
+                vid[i+1] -= ataque1;
+                
+                System.out.println(nombres[i]+" quito "+ataque1+" de vida a "+nombres[i+1]);
+                System.out.println(nombres[i+1]+" quito "+ataque2+" de vida a "+nombres[i]);
+                System.out.println("------------------------");
+                
+                /*String [] nombres2 = new String [nombres.length - 1];
+                int [] vid2 = new int [vid.length - 1];
+                
+                if(vid[i] == 0){
+                    for(int j = 0; j < nombres2.length; j++){
+                        if(i != j){
+                            nombres2[i] = nombres[i]; 
+                            vid2[i] = vid[i];
                         }
                     }
                 }
-                ataque1 = cont;
-                
-                nom2 = nombres[i+1];
-                for(int w = 0; w < nom2.length(); w++){
-                    carac1 = nom2.charAt(i);
-                    for(int v = 0; v < nom2.length(); v++){
-                        carac2 = nom2.charAt(i);
-                        if(carac1 == carac2){
-                            cont2 ++;
-                        }
-                    }
-                }
-                ataque2 = cont2;
-                
-                vid[i] -= cont2;
-                vid[i+1] -= cont;
-                
-                System.out.println(nom1+" (Vida: "+vid[i]+") VS "+nom2+" (Vida: "+vid[i+1]+")");
+                nombres = nombres2;*/
             }
+            rondas ++;
         }
+    }
+    
+    public static int ataque(String nom){
+        char carac1 = ' ';
+        char carac2 = ' ';
+        int cont = 0;
+        int contemp = 0;
+        for(int w = 0; w < nom.length(); w++){
+            carac1 = nom.charAt(w);
+            for(int v = 0; v < nom.length(); v++){
+                carac2 = nom.charAt(v);
+                if(carac1 == carac2){
+                    cont ++;
+                    if(cont >= contemp){
+                        contemp = cont;
+                    }
+                }
+            }
+            cont = 0;
+        }
+        return contemp;
     }
 }
